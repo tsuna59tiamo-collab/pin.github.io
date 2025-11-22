@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的GitHub网站 - 部署指南</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* 导航栏样式 */
+        header {
+            background-color: #24292e;
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #58a6ff;
+        }
+        
+        /* 英雄区域样式 */
+        .hero {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: white;
+            color: #6e8efb;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin: 0.5rem;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        /* 内容区域样式 */
+        section {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: #333;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 3px;
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #6e8efb;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .steps {
+            counter-reset: step-counter;
+        }
+        
+        .step {
+            display: flex;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .step::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(to right, #6e8efb, #a777e3);
+            color: white;
+            border-radius: 50%;
+            margin-right: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-content h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        /* 页脚样式 */
+        footer {
+            background-color: #24292e;
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: #58a6ff;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #58a6ff;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .step {
+                flex-direction: column;
+            }
+            
+            .step::before {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* 状态指示器 */
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-success {
+            background-color: #28a745;
+        }
+        
+        .status-warning {
+            background-color: #ffc107;
+        }
+        
+        .status-error {
+            background-color: #dc3545;
+        }
+        
+        .troubleshooting {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .troubleshooting h4 {
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <span>🚀</span> GitHub Pages指南
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">首页</a></li>
+                    <li><a href="#deploy">部署指南</a></li>
+                    <li><a href="#troubleshoot">故障排除</a></li>
+                    <li><a href="#contact">联系</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>解决GitHub Pages 404错误</h1>
+            <p>本指南将帮助您成功部署GitHub Pages网站并解决常见的404错误问题。</p>
+            <a href="#deploy" class="btn">查看部署指南</a>
+            <a href="#troubleshoot" class="btn btn-secondary">故障排除</a>
+        </div>
+    </section>
+
+    <!-- 部署指南 -->
+    <section id="deploy">
+        <div class="container">
+            <div class="section-title">
+                <h2>GitHub Pages部署指南</h2>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-content">
+                        <h3>创建GitHub仓库</h3>
+                        <p>登录GitHub，点击右上角"+"号，选择"New repository"。仓库名称格式必须为：<strong>username.github.io</strong>（将username替换为您的GitHub用户名）。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-content">
+                        <h3>上传文件</h3>
+                        <p>将您的网站文件（包括index.html）上传到仓库。您可以使用Git命令行或直接在GitHub网站上拖拽上传。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-content">
+                        <h3>启用GitHub Pages</h3>
+                        <p>进入仓库设置（Settings），找到"Pages"选项。在"Source"部分，选择您存放网站文件的分支（通常是main或master），然后点击"Save"。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-content">
+                        <h3>访问您的网站</h3>
+                        <p>等待几分钟后，访问 https://username.github.io 查看您的网站。如果显示404错误，请继续查看下面的故障排除部分。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 故障排除 -->
+    <section id="troubleshoot" style="background-color: #f0f4f8;">
+        <div class="container">
+            <div class="section-title">
+                <h2>故障排除</h2>
+            </div>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">📁</div>
+                    <h3>检查文件结构</h3>
+                    <p>确保您的index.html文件位于仓库的根目录，而不是在子文件夹中。</p>
+                    <div class="troubleshooting">
+                        <h4>正确结构：</h4>
+                        <p>username.github.io/<br>├── index.html<br>├── css/<br>└── images/</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌿</div>
+                    <h3>检查分支设置</h3>
+                    <p>在仓库设置的Pages部分，确保选择了正确的分支（通常是main或master）。</p>
+                    <div class="troubleshooting">
+                        <h4>操作步骤：</h4>
+                        <p>Settings → Pages → Source → 选择分支 → Save</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏱️</div>
+                    <h3>等待部署完成</h3>
+                    <p>GitHub Pages部署可能需要几分钟时间。如果刚刚设置完成，请等待10-15分钟后再检查。</p>
+                    <div class="troubleshooting">
+                        <h4>检查部署状态：</h4>
+                        <p>在仓库的"Actions"标签页中查看部署状态。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title" style="margin-top: 4rem;">
+                <h2>常见问题状态</h2>
+            </div>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <h3><span class="status-indicator status-success"></span> 成功部署</h3>
+                    <p>如果一切正常，您的网站将在 https://username.github.io 上可用。</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="status-indicator status-warning"></span> 构建中</h3>
+                    <p>GitHub正在构建您的网站，这通常需要几分钟时间。请耐心等待。</p>
+                </div>
+                <div class="feature-card">
+                    <h3><span class="status-indicator status-error"></span> 构建失败</h3>
+                    <p>检查您的代码是否有错误，特别是HTML、CSS或JavaScript语法错误。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>关于本指南</h3>
+                    <p>本指南旨在帮助用户解决GitHub Pages部署中的常见问题，特别是404错误。</p>
+                </div>
+                <div class="footer-column">
+                    <h3>有用链接</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://pages.github.com" target="_blank">GitHub Pages官方文档</a></li>
+                        <li><a href="https://docs.github.com/en/pages" target="_blank">GitHub Pages指南</a></li>
+                        <li><a href="https://github.com/contact" target="_blank">GitHub支持</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>提示</h3>
+                    <ul class="footer-links">
+                        <li>确保仓库名称格式正确</li>
+                        <li>检查文件是否在正确分支</li>
+                        <li>等待部署完成</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 GitHub Pages部署指南. 本页面使用GitHub Pages托管.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
